@@ -1,0 +1,24 @@
+# ninja log v7
+27	410	7994002040254287	CMakeFiles/RobloxMidiPlayer.dir/_deps/midifile-src/src/MidiEvent.cpp.obj	a953ba33fa386b41
+25	568	7994002040229028	CMakeFiles/RobloxMidiPlayer.dir/_deps/midifile-src/src/Binasc.cpp.obj	1deee597e2775346
+41	675	7994002040392287	CMakeFiles/RobloxMidiPlayer.dir/_deps/midifile-src/src/Options.cpp.obj	3c2011da09e1706a
+37	709	7994002040350355	CMakeFiles/RobloxMidiPlayer.dir/_deps/midifile-src/src/MidiMessage.cpp.obj	5ad28922f6880c0d
+30	819	7994002040284285	CMakeFiles/RobloxMidiPlayer.dir/_deps/midifile-src/src/MidiEventList.cpp.obj	dd90b3beb9700dc5
+34	861	7994002040319373	CMakeFiles/RobloxMidiPlayer.dir/_deps/midifile-src/src/MidiFile.cpp.obj	f99cd9f78a53d128
+20	955	7994002040183953	CMakeFiles/RobloxMidiPlayer.dir/_deps/imgui-src/backends/imgui_impl_win32.cpp.obj	ce1a09add2b28e23
+17	1042	7994002040148913	CMakeFiles/RobloxMidiPlayer.dir/_deps/imgui-src/imgui_tables.cpp.obj	76bc61af3292d540
+22	1086	7994002040199020	CMakeFiles/RobloxMidiPlayer.dir/_deps/imgui-src/backends/imgui_impl_dx11.cpp.obj	66f4ce1e5b781f06
+3	1010	7994059130536198	CMakeFiles/RobloxMidiPlayer.dir/src/ui.cpp.obj	2032c00d2fcb9f73
+4	1398	7994066163958335	CMakeFiles/RobloxMidiPlayer.dir/src/main.cpp.obj	928725a20900a547
+4	1340	7994062318708523	CMakeFiles/RobloxMidiPlayer.dir/src/midi_player.cpp.obj	f5f3119549542dee
+15	1428	7994002040128822	CMakeFiles/RobloxMidiPlayer.dir/_deps/imgui-src/imgui_draw.cpp.obj	9688260572d7b665
+18	1491	7994002040163911	CMakeFiles/RobloxMidiPlayer.dir/_deps/imgui-src/imgui_widgets.cpp.obj	ea2b04389c47c389
+13	1921	7994002040104160	CMakeFiles/RobloxMidiPlayer.dir/_deps/imgui-src/imgui.cpp.obj	671def7c376b3eca
+3	149	7994068522904590	RobloxMidiPlayer.exe	bbbb58d88ddef50d
+1	2626	7994071742207155	build.ninja	5404d7cb51a1cf93
+1	2626	7994071742187086	C:/Projects/Roblox Midi Player/build/cmake_install.cmake	5404d7cb51a1cf93
+1	2948	7994071742207155	build.ninja	5404d7cb51a1cf93
+1	2948	7994071742207155	C:/Projects/Roblox Midi Player/build/cmake_install.cmake	5404d7cb51a1cf93
+3	155	7994071742357196	RobloxMidiPlayer.exe	2f6af85f5e9ee9bc
+3	1330	7994079944447412	CMakeFiles/RobloxMidiPlayer.dir/src/main.cpp.obj	928725a20900a547
+1330	1458	7994079957723293	RobloxMidiPlayer.exe	2f6af85f5e9ee9bc

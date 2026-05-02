@@ -1,0 +1,3 @@
+C:/Projects/Roblox Midi Player/build/CMakeFiles/RobloxMidiPlayer.dir
+C:/Projects/Roblox Midi Player/build/CMakeFiles/edit_cache.dir
+C:/Projects/Roblox Midi Player/build/CMakeFiles/rebuild_cache.dir

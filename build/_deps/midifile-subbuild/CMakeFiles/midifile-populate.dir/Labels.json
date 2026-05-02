@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "C:/Projects/Roblox Midi Player/build/_deps/midifile-subbuild/CMakeFiles/midifile-populate"
+		},
+		{
+			"file" : "C:/Projects/Roblox Midi Player/build/_deps/midifile-subbuild/CMakeFiles/midifile-populate.rule"
+		},
+		{
+			"file" : "C:/Projects/Roblox Midi Player/build/_deps/midifile-subbuild/CMakeFiles/midifile-populate-complete.rule"
+		},
+		{
+			"file" : "C:/Projects/Roblox Midi Player/build/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-build.rule"
+		},
+		{
+			"file" : "C:/Projects/Roblox Midi Player/build/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-configure.rule"
+		},
+		{
+			"file" : "C:/Projects/Roblox Midi Player/build/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-download.rule"
+		},
+		{
+			"file" : "C:/Projects/Roblox Midi Player/build/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-install.rule"
+		},
+		{
+			"file" : "C:/Projects/Roblox Midi Player/build/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-mkdir.rule"
+		},
+		{
+			"file" : "C:/Projects/Roblox Midi Player/build/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-patch.rule"
+		},
+		{
+			"file" : "C:/Projects/Roblox Midi Player/build/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-test.rule"
+		},
+		{
+			"file" : "C:/Projects/Roblox Midi Player/build/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"midifile-populate"
+		],
+		"name" : "midifile-populate"
+	}
+}

@@ -1,0 +1,37 @@
+# ninja log v7
+0	34	7994001373086460	midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-mkdir	8513d4ee11bc0747
+0	34	7994001373086460	C:/Projects/Roblox Midi Player/build/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-mkdir	8513d4ee11bc0747
+34	3315	7994001405902862	midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-download	e90c443c48adf1a3
+34	3315	7994001405902862	C:/Projects/Roblox Midi Player/build/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-download	e90c443c48adf1a3
+1	983	7994035656047411	midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-update	a2a5d6c460cbb6a3
+1	983	7994035656047411	C:/Projects/Roblox Midi Player/build/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-update	a2a5d6c460cbb6a3
+983	1015	7994035666138399	midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-patch	ebec13a459269832
+983	1015	7994035666138399	C:/Projects/Roblox Midi Player/build/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-patch	ebec13a459269832
+1015	1046	7994035666457611	midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-configure	7dafdfce5c15d80f
+1015	1046	7994035666457611	C:/Projects/Roblox Midi Player/build/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-configure	7dafdfce5c15d80f
+1046	1079	7994035666778350	midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-build	21cdc32e36cac90b
+1046	1079	7994035666778350	C:/Projects/Roblox Midi Player/build/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-build	21cdc32e36cac90b
+1079	1112	7994035667107199	midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-install	dbec985a03045919
+1079	1112	7994035667107199	C:/Projects/Roblox Midi Player/build/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-install	dbec985a03045919
+1112	1144	7994035667429830	midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-test	11d1e8d69c8f1b2f
+1112	1144	7994035667429830	C:/Projects/Roblox Midi Player/build/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-test	11d1e8d69c8f1b2f
+1144	1190	7994035667881167	CMakeFiles/midifile-populate-complete	40f85cf2af81aff7
+1144	1190	7994035667881167	midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-done	40f85cf2af81aff7
+1144	1190	7994035667881167	C:/Projects/Roblox Midi Player/build/_deps/midifile-subbuild/CMakeFiles/midifile-populate-complete	40f85cf2af81aff7
+1144	1190	7994035667881167	C:/Projects/Roblox Midi Player/build/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-done	40f85cf2af81aff7
+1	1040	7994071729130448	midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-update	a2a5d6c460cbb6a3
+1	1040	7994071729130448	C:/Projects/Roblox Midi Player/build/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-update	a2a5d6c460cbb6a3
+1041	1082	7994071739872449	midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-patch	ebec13a459269832
+1041	1082	7994071739872449	C:/Projects/Roblox Midi Player/build/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-patch	ebec13a459269832
+1082	1125	7994071740319630	midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-configure	7dafdfce5c15d80f
+1082	1125	7994071740319630	C:/Projects/Roblox Midi Player/build/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-configure	7dafdfce5c15d80f
+1125	1164	7994071740708859	midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-build	21cdc32e36cac90b
+1125	1164	7994071740708859	C:/Projects/Roblox Midi Player/build/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-build	21cdc32e36cac90b
+1164	1202	7994071741088460	midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-install	dbec985a03045919
+1164	1202	7994071741088460	C:/Projects/Roblox Midi Player/build/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-install	dbec985a03045919
+1202	1239	7994071741460750	midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-test	11d1e8d69c8f1b2f
+1202	1239	7994071741460750	C:/Projects/Roblox Midi Player/build/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-test	11d1e8d69c8f1b2f
+1239	1294	7994071742005000	CMakeFiles/midifile-populate-complete	40f85cf2af81aff7
+1239	1294	7994071742005000	midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-done	40f85cf2af81aff7
+1239	1294	7994071742005000	C:/Projects/Roblox Midi Player/build/_deps/midifile-subbuild/CMakeFiles/midifile-populate-complete	40f85cf2af81aff7
+1239	1294	7994071742005000	C:/Projects/Roblox Midi Player/build/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/midifile-populate-done	40f85cf2af81aff7
