@@ -1,0 +1,150 @@
+^C:\PROJECTS\ROBLOX MIDI PLAYER\OUT\_DEPS\MIDIFILE-SUBBUILD\CMAKEFILES\59AAF9EFD4DEF13948373F2E068184E7\MIDIFILE-POPULATE-MKDIR.RULE
+setlocal
+C:\mingw64\bin\cmake.exe -Dcfgdir=/Debug -P "C:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild/midifile-populate-prefix/tmp/midifile-populate-mkdirs.cmake"
+if %errorlevel% neq 0 goto :cmEnd
+C:\mingw64\bin\cmake.exe -E touch "C:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/Debug/midifile-populate-mkdir"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROJECTS\ROBLOX MIDI PLAYER\OUT\_DEPS\MIDIFILE-SUBBUILD\CMAKEFILES\59AAF9EFD4DEF13948373F2E068184E7\MIDIFILE-POPULATE-DOWNLOAD.RULE
+setlocal
+cd "C:\Projects\Roblox Midi Player\out\_deps"
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+C:\mingw64\bin\cmake.exe -DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE -P "C:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild/midifile-populate-prefix/tmp/midifile-populate-gitclone.cmake"
+if %errorlevel% neq 0 goto :cmEnd
+C:\mingw64\bin\cmake.exe -E touch "C:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/Debug/midifile-populate-download"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROJECTS\ROBLOX MIDI PLAYER\OUT\_DEPS\MIDIFILE-SUBBUILD\CMAKEFILES\59AAF9EFD4DEF13948373F2E068184E7\MIDIFILE-POPULATE-UPDATE.RULE
+setlocal
+cd "C:\Projects\Roblox Midi Player\out\_deps\midifile-src"
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+C:\mingw64\bin\cmake.exe -Dcan_fetch=YES -DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE -P "C:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild/midifile-populate-prefix/tmp/midifile-populate-gitupdate.cmake"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROJECTS\ROBLOX MIDI PLAYER\OUT\_DEPS\MIDIFILE-SUBBUILD\CMAKEFILES\59AAF9EFD4DEF13948373F2E068184E7\MIDIFILE-POPULATE-PATCH.RULE
+setlocal
+C:\mingw64\bin\cmake.exe -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+C:\mingw64\bin\cmake.exe -E touch "C:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/Debug/midifile-populate-patch"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROJECTS\ROBLOX MIDI PLAYER\OUT\_DEPS\MIDIFILE-SUBBUILD\CMAKEFILES\59AAF9EFD4DEF13948373F2E068184E7\MIDIFILE-POPULATE-CONFIGURE.RULE
+setlocal
+cd "C:\Projects\Roblox Midi Player\out\_deps\midifile-build"
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+C:\mingw64\bin\cmake.exe -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+C:\mingw64\bin\cmake.exe -E touch "C:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/Debug/midifile-populate-configure"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROJECTS\ROBLOX MIDI PLAYER\OUT\_DEPS\MIDIFILE-SUBBUILD\CMAKEFILES\59AAF9EFD4DEF13948373F2E068184E7\MIDIFILE-POPULATE-BUILD.RULE
+setlocal
+cd "C:\Projects\Roblox Midi Player\out\_deps\midifile-build"
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+C:\mingw64\bin\cmake.exe -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+C:\mingw64\bin\cmake.exe -E touch "C:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/Debug/midifile-populate-build"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROJECTS\ROBLOX MIDI PLAYER\OUT\_DEPS\MIDIFILE-SUBBUILD\CMAKEFILES\59AAF9EFD4DEF13948373F2E068184E7\MIDIFILE-POPULATE-INSTALL.RULE
+setlocal
+cd "C:\Projects\Roblox Midi Player\out\_deps\midifile-build"
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+C:\mingw64\bin\cmake.exe -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+C:\mingw64\bin\cmake.exe -E touch "C:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/Debug/midifile-populate-install"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROJECTS\ROBLOX MIDI PLAYER\OUT\_DEPS\MIDIFILE-SUBBUILD\CMAKEFILES\59AAF9EFD4DEF13948373F2E068184E7\MIDIFILE-POPULATE-TEST.RULE
+setlocal
+cd "C:\Projects\Roblox Midi Player\out\_deps\midifile-build"
+if %errorlevel% neq 0 goto :cmEnd
+C:
+if %errorlevel% neq 0 goto :cmEnd
+C:\mingw64\bin\cmake.exe -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+C:\mingw64\bin\cmake.exe -E touch "C:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/Debug/midifile-populate-test"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROJECTS\ROBLOX MIDI PLAYER\OUT\_DEPS\MIDIFILE-SUBBUILD\CMAKEFILES\0AF6DA8983CBAAB0C36434F063FF4EAC\MIDIFILE-POPULATE-COMPLETE.RULE
+setlocal
+C:\mingw64\bin\cmake.exe -E make_directory "C:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild/CMakeFiles/Debug"
+if %errorlevel% neq 0 goto :cmEnd
+C:\mingw64\bin\cmake.exe -E touch "C:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild/CMakeFiles/Debug/midifile-populate-complete"
+if %errorlevel% neq 0 goto :cmEnd
+C:\mingw64\bin\cmake.exe -E touch "C:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild/midifile-populate-prefix/src/midifile-populate-stamp/Debug/midifile-populate-done"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROJECTS\ROBLOX MIDI PLAYER\OUT\_DEPS\MIDIFILE-SUBBUILD\CMAKEFILES\FA893E5864588D8507DDF7F664CCDB25\MIDIFILE-POPULATE.RULE
+setlocal
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROJECTS\ROBLOX MIDI PLAYER\OUT\_DEPS\MIDIFILE-SUBBUILD\CMAKELISTS.TXT
+setlocal
+C:\mingw64\bin\cmake.exe "-SC:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild" "-BC:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild" --check-stamp-file "C:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

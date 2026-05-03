@@ -1,0 +1,3 @@
+C:/Projects/Roblox Midi Player/out/CMakeFiles/RobloxMidiPlayer.dir
+C:/Projects/Roblox Midi Player/out/CMakeFiles/ALL_BUILD.dir
+C:/Projects/Roblox Midi Player/out/CMakeFiles/ZERO_CHECK.dir

@@ -1,0 +1,15 @@
+C:\Projects\Roblox Midi Player\src\main.cpp;C:\Projects\Roblox Midi Player\out\RobloxMidiPlayer.dir\Release\main.obj
+C:\Projects\Roblox Midi Player\src\ui.cpp;C:\Projects\Roblox Midi Player\out\RobloxMidiPlayer.dir\Release\ui.obj
+C:\Projects\Roblox Midi Player\src\midi_player.cpp;C:\Projects\Roblox Midi Player\out\RobloxMidiPlayer.dir\Release\midi_player.obj
+C:\Projects\Roblox Midi Player\out\_deps\imgui-src\imgui.cpp;C:\Projects\Roblox Midi Player\out\RobloxMidiPlayer.dir\Release\imgui.obj
+C:\Projects\Roblox Midi Player\out\_deps\imgui-src\imgui_draw.cpp;C:\Projects\Roblox Midi Player\out\RobloxMidiPlayer.dir\Release\imgui_draw.obj
+C:\Projects\Roblox Midi Player\out\_deps\imgui-src\imgui_tables.cpp;C:\Projects\Roblox Midi Player\out\RobloxMidiPlayer.dir\Release\imgui_tables.obj
+C:\Projects\Roblox Midi Player\out\_deps\imgui-src\imgui_widgets.cpp;C:\Projects\Roblox Midi Player\out\RobloxMidiPlayer.dir\Release\imgui_widgets.obj
+C:\Projects\Roblox Midi Player\out\_deps\imgui-src\backends\imgui_impl_win32.cpp;C:\Projects\Roblox Midi Player\out\RobloxMidiPlayer.dir\Release\imgui_impl_win32.obj
+C:\Projects\Roblox Midi Player\out\_deps\imgui-src\backends\imgui_impl_dx11.cpp;C:\Projects\Roblox Midi Player\out\RobloxMidiPlayer.dir\Release\imgui_impl_dx11.obj
+C:\Projects\Roblox Midi Player\out\_deps\midifile-src\src\Binasc.cpp;C:\Projects\Roblox Midi Player\out\RobloxMidiPlayer.dir\Release\Binasc.obj
+C:\Projects\Roblox Midi Player\out\_deps\midifile-src\src\MidiEvent.cpp;C:\Projects\Roblox Midi Player\out\RobloxMidiPlayer.dir\Release\MidiEvent.obj
+C:\Projects\Roblox Midi Player\out\_deps\midifile-src\src\MidiEventList.cpp;C:\Projects\Roblox Midi Player\out\RobloxMidiPlayer.dir\Release\MidiEventList.obj
+C:\Projects\Roblox Midi Player\out\_deps\midifile-src\src\MidiFile.cpp;C:\Projects\Roblox Midi Player\out\RobloxMidiPlayer.dir\Release\MidiFile.obj
+C:\Projects\Roblox Midi Player\out\_deps\midifile-src\src\MidiMessage.cpp;C:\Projects\Roblox Midi Player\out\RobloxMidiPlayer.dir\Release\MidiMessage.obj
+C:\Projects\Roblox Midi Player\out\_deps\midifile-src\src\Options.cpp;C:\Projects\Roblox Midi Player\out\RobloxMidiPlayer.dir\Release\Options.obj

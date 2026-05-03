@@ -17,6 +17,10 @@ namespace UI {
     static bool capturingStopKey = false;
     static bool capturingSpeedUpKey = false;
     static bool capturingSpeedDownKey = false;
+    static bool capturingNextKey = false;
+    static bool capturingPrevKey = false;
+    static bool capturingLoopKey = false;
+    static bool capturingShuffleKey = false;
 
     std::string GetKeyName(int vk);
 
@@ -259,9 +263,16 @@ namespace UI {
                     }
                 }
                 ImGui::SameLine();
-                if (ImGui::Button("X", ImVec2(30, 20))) {
-                    queue.erase(queue.begin() + i);
-                    i--;
+                if (texClose) {
+                    if (ImGui::ImageButton("btnRemove", texClose, ImVec2(20, 20))) {
+                        queue.erase(queue.begin() + i);
+                        i--;
+                    }
+                } else {
+                    if (ImGui::Button("✕", ImVec2(30, 20))) {
+                        queue.erase(queue.begin() + i);
+                        i--;
+                    }
                 }
                 ImGui::PopID();
             }
@@ -463,6 +474,110 @@ namespace UI {
                 capturingStartKey = false;
                 capturingStopKey = false;
                 capturingSpeedUpKey = false;
+                capturingNextKey = false;
+                capturingPrevKey = false;
+                capturingLoopKey = false;
+                capturingShuffleKey = false;
+            }
+        }
+
+        ImGui::Spacing();
+
+        // Next Track Key
+        ImGui::Text("Next Track:"); ImGui::SameLine(200);
+        if (capturingNextKey) {
+            ImGui::Button("Press any key...##3", ImVec2(150, 30));
+            for (int i = 8; i < 256; i++) {
+                if (GetAsyncKeyState(i) & 0x8000) {
+                    player.nextTrackKey = i;
+                    capturingNextKey = false;
+                    break;
+                }
+            }
+        } else {
+            if (ImGui::Button(GetKeyName(player.nextTrackKey).c_str(), ImVec2(150, 30))) {
+                capturingNextKey = true;
+                capturingStartKey = false;
+                capturingStopKey = false;
+                capturingSpeedUpKey = false;
+                capturingSpeedDownKey = false;
+                capturingPrevKey = false;
+                capturingLoopKey = false;
+                capturingShuffleKey = false;
+            }
+        }
+
+        // Previous Track Key
+        ImGui::Text("Previous Track:"); ImGui::SameLine(200);
+        if (capturingPrevKey) {
+            ImGui::Button("Press any key...##4", ImVec2(150, 30));
+            for (int i = 8; i < 256; i++) {
+                if (GetAsyncKeyState(i) & 0x8000) {
+                    player.prevTrackKey = i;
+                    capturingPrevKey = false;
+                    break;
+                }
+            }
+        } else {
+            if (ImGui::Button(GetKeyName(player.prevTrackKey).c_str(), ImVec2(150, 30))) {
+                capturingPrevKey = true;
+                capturingStartKey = false;
+                capturingStopKey = false;
+                capturingSpeedUpKey = false;
+                capturingSpeedDownKey = false;
+                capturingNextKey = false;
+                capturingLoopKey = false;
+                capturingShuffleKey = false;
+            }
+        }
+
+        ImGui::Spacing();
+
+        // Loop Toggle Key
+        ImGui::Text("Toggle Loop:"); ImGui::SameLine(200);
+        if (capturingLoopKey) {
+            ImGui::Button("Press any key...##5", ImVec2(150, 30));
+            for (int i = 8; i < 256; i++) {
+                if (GetAsyncKeyState(i) & 0x8000) {
+                    player.loopKey = i;
+                    capturingLoopKey = false;
+                    break;
+                }
+            }
+        } else {
+            if (ImGui::Button(GetKeyName(player.loopKey).c_str(), ImVec2(150, 30))) {
+                capturingLoopKey = true;
+                capturingStartKey = false;
+                capturingStopKey = false;
+                capturingSpeedUpKey = false;
+                capturingSpeedDownKey = false;
+                capturingNextKey = false;
+                capturingPrevKey = false;
+                capturingShuffleKey = false;
+            }
+        }
+
+        // Shuffle Key
+        ImGui::Text("Shuffle Queue:"); ImGui::SameLine(200);
+        if (capturingShuffleKey) {
+            ImGui::Button("Press any key...##6", ImVec2(150, 30));
+            for (int i = 8; i < 256; i++) {
+                if (GetAsyncKeyState(i) & 0x8000) {
+                    player.shuffleKey = i;
+                    capturingShuffleKey = false;
+                    break;
+                }
+            }
+        } else {
+            if (ImGui::Button(GetKeyName(player.shuffleKey).c_str(), ImVec2(150, 30))) {
+                capturingShuffleKey = true;
+                capturingStartKey = false;
+                capturingStopKey = false;
+                capturingSpeedUpKey = false;
+                capturingSpeedDownKey = false;
+                capturingNextKey = false;
+                capturingPrevKey = false;
+                capturingLoopKey = false;
             }
         }
 
@@ -655,7 +770,7 @@ namespace UI {
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.8f, 0.2f, 0.2f, 0.8f));
         if (texClose && ImGui::ImageButton("btnClose", texClose, ImVec2(20, 20))) {
             PostMessageA(hwnd, WM_CLOSE, 0, 0);
-        } else if (!texClose && ImGui::Button("X", ImVec2(30, 20))) {
+        } else if (!texClose && ImGui::Button("✕", ImVec2(30, 20))) {
             PostMessageA(hwnd, WM_CLOSE, 0, 0);
         }
         ImGui::PopStyleColor(); // End close hovered

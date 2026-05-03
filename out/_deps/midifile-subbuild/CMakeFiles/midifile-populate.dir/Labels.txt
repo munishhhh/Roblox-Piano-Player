@@ -1,0 +1,14 @@
+# Target labels
+ midifile-populate
+# Source files and their labels
+C:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild/CMakeFiles/midifile-populate
+C:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild/CMakeFiles/fa893e5864588d8507ddf7f664ccdb25/midifile-populate.rule
+C:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild/CMakeFiles/0af6da8983cbaab0c36434f063ff4eac/midifile-populate-complete.rule
+C:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild/CMakeFiles/59aaf9efd4def13948373f2e068184e7/midifile-populate-build.rule
+C:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild/CMakeFiles/59aaf9efd4def13948373f2e068184e7/midifile-populate-configure.rule
+C:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild/CMakeFiles/59aaf9efd4def13948373f2e068184e7/midifile-populate-download.rule
+C:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild/CMakeFiles/59aaf9efd4def13948373f2e068184e7/midifile-populate-install.rule
+C:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild/CMakeFiles/59aaf9efd4def13948373f2e068184e7/midifile-populate-mkdir.rule
+C:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild/CMakeFiles/59aaf9efd4def13948373f2e068184e7/midifile-populate-patch.rule
+C:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild/CMakeFiles/59aaf9efd4def13948373f2e068184e7/midifile-populate-test.rule
+C:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild/CMakeFiles/59aaf9efd4def13948373f2e068184e7/midifile-populate-update.rule

@@ -1,8 +1,10 @@
 #include "midi_player.h"
 #include "MidiFile.h"
+#define NOMINMAX
 #include <windows.h>
 #include <chrono>
 #include <algorithm>
+#include <random>
 
 using namespace smf;
 
@@ -137,16 +139,32 @@ bool MidiPlayer::IsFavorite(const std::string& path) {
     return std::find(m_favorites.begin(), m_favorites.end(), path) != m_favorites.end();
 }
 
+void MidiPlayer::Shuffle() {
+    if (m_queue.size() > 1) {
+        std::random_device rd;
+        std::mt19937 g(rd());
+        std::shuffle(m_queue.begin(), m_queue.end(), g);
+    }
+}
+
 void MidiPlayer::UpdateGlobalHotkeys() {
     static bool wasStartPressed = false;
     static bool wasStopPressed = false;
     static bool wasSpeedUpPressed = false;
     static bool wasSpeedDownPressed = false;
+    static bool wasNextPressed = false;
+    static bool wasPrevPressed = false;
+    static bool wasLoopPressed = false;
+    static bool wasShufflePressed = false;
 
     bool isStartPressed = (GetAsyncKeyState(startKey) & 0x8000) != 0;
     bool isStopPressed = (GetAsyncKeyState(stopKey) & 0x8000) != 0;
     bool isSpeedUpPressed = (GetAsyncKeyState(speedUpKey) & 0x8000) != 0;
     bool isSpeedDownPressed = (GetAsyncKeyState(speedDownKey) & 0x8000) != 0;
+    bool isNextPressed = (GetAsyncKeyState(nextTrackKey) & 0x8000) != 0;
+    bool isPrevPressed = (GetAsyncKeyState(prevTrackKey) & 0x8000) != 0;
+    bool isLoopPressed = (GetAsyncKeyState(loopKey) & 0x8000) != 0;
+    bool isShufflePressed = (GetAsyncKeyState(shuffleKey) & 0x8000) != 0;
 
     if (isStartPressed && !wasStartPressed) {
         if (!m_isPlaying) Play();
@@ -166,10 +184,30 @@ void MidiPlayer::UpdateGlobalHotkeys() {
         m_speed = std::max(m_speed - 0.1f, 0.1f);
     }
 
+    if (isNextPressed && !wasNextPressed) {
+        NextTrack();
+    }
+
+    if (isPrevPressed && !wasPrevPressed) {
+        PreviousTrack();
+    }
+
+    if (isLoopPressed && !wasLoopPressed) {
+        loopQueue = !loopQueue;
+    }
+
+    if (isShufflePressed && !wasShufflePressed) {
+        Shuffle();
+    }
+
     wasStartPressed = isStartPressed;
     wasStopPressed = isStopPressed;
     wasSpeedUpPressed = isSpeedUpPressed;
     wasSpeedDownPressed = isSpeedDownPressed;
+    wasNextPressed = isNextPressed;
+    wasPrevPressed = isPrevPressed;
+    wasLoopPressed = isLoopPressed;
+    wasShufflePressed = isShufflePressed;
 }
 
 void MidiPlayer::Pause() {

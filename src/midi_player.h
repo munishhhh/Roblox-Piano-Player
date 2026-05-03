@@ -43,12 +43,27 @@ public:
     void ToggleFavorite(const std::string& path);
     bool IsFavorite(const std::string& path);
 
-    // Settings
     int startKey = 0x70; // VK_F1
     int stopKey = 0x79;  // VK_F10
     int speedUpKey = 0xBB; // VK_OEM_PLUS (=/+)
     int speedDownKey = 0xBD; // VK_OEM_MINUS (-/_)
-    void ResetHotkeys() { startKey = 0x70; stopKey = 0x79; speedUpKey = 0xBB; speedDownKey = 0xBD; }
+    int nextTrackKey = 0x27; // VK_RIGHT
+    int prevTrackKey = 0x25; // VK_LEFT
+    int loopKey = 0x4C; // L key
+    int shuffleKey = 0x53; // S key
+    
+    void ResetHotkeys() { 
+        startKey = 0x70; 
+        stopKey = 0x79; 
+        speedUpKey = 0xBB; 
+        speedDownKey = 0xBD; 
+        nextTrackKey = 0x27;
+        prevTrackKey = 0x25;
+        loopKey = 0x4C;
+        shuffleKey = 0x53;
+    }
+
+    void Shuffle();
 
     void UpdateGlobalHotkeys();
 

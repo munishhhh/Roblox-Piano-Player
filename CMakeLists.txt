@@ -28,7 +28,7 @@ set(SOURCES
     src/main.cpp
     src/ui.cpp
     src/midi_player.cpp
-    build/app.obj
+    app.rc
     ${imgui_SOURCE_DIR}/imgui.cpp
     ${imgui_SOURCE_DIR}/imgui_draw.cpp
     ${imgui_SOURCE_DIR}/imgui_tables.cpp
