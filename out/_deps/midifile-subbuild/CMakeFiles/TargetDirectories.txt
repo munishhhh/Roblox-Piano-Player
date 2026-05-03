@@ -1,3 +1,0 @@
-C:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild/CMakeFiles/midifile-populate.dir
-C:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild/CMakeFiles/ALL_BUILD.dir
-C:/Projects/Roblox Midi Player/out/_deps/midifile-subbuild/CMakeFiles/ZERO_CHECK.dir
