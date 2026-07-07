@@ -5,8 +5,123 @@
 #include <chrono>
 #include <algorithm>
 #include <random>
+#include <cstdint>
+#include <fstream>
+#include <iterator>
+#include <sstream>
+#include <vector>
+#include <filesystem>
 
 using namespace smf;
+namespace {
+    bool ReadVlq(const std::vector<unsigned char>& data, size_t& pos, size_t end, uint32_t& value) {
+        value = 0;
+        for (int i = 0; i < 4; ++i) {
+            if (pos >= end) return false;
+            unsigned char byte = data[pos++];
+            value = (value << 7) | (byte & 0x7f);
+            if ((byte & 0x80) == 0) return true;
+        }
+        return false;
+    }
+
+    uint16_t ReadU16(const std::vector<unsigned char>& data, size_t pos) {
+        return static_cast<uint16_t>((data[pos] << 8) | data[pos + 1]);
+    }
+
+    uint32_t ReadU32(const std::vector<unsigned char>& data, size_t pos) {
+        return (static_cast<uint32_t>(data[pos]) << 24) |
+               (static_cast<uint32_t>(data[pos + 1]) << 16) |
+               (static_cast<uint32_t>(data[pos + 2]) << 8) |
+               static_cast<uint32_t>(data[pos + 3]);
+    }
+
+    bool SanitizeMidiDataBytes(std::vector<unsigned char>& data) {
+        if (data.size() < 14 || std::string(reinterpret_cast<const char*>(data.data()), 4) != "MThd") {
+            return false;
+        }
+
+        const uint32_t headerLength = ReadU32(data, 4);
+        if (8ULL + headerLength > data.size() || headerLength < 6) return false;
+
+        const uint16_t trackCount = ReadU16(data, 10);
+        size_t pos = 8 + headerLength;
+        bool changed = false;
+
+        for (uint16_t track = 0; track < trackCount; ++track) {
+            if (pos + 8 > data.size() || std::string(reinterpret_cast<const char*>(&data[pos]), 4) != "MTrk") {
+                return changed;
+            }
+
+            const uint32_t trackLength = ReadU32(data, pos + 4);
+            size_t eventPos = pos + 8;
+            const size_t end = eventPos + trackLength;
+            if (end > data.size()) return changed;
+
+            unsigned char runningStatus = 0;
+            while (eventPos < end) {
+                uint32_t delta = 0;
+                if (!ReadVlq(data, eventPos, end, delta) || eventPos >= end) return changed;
+
+                unsigned char status = data[eventPos];
+                if (status >= 0x80) {
+                    ++eventPos;
+                    if (status == 0xff) {
+                        if (eventPos >= end) return changed;
+                        ++eventPos;
+                        uint32_t length = 0;
+                        if (!ReadVlq(data, eventPos, end, length) || eventPos + length > end) return changed;
+                        eventPos += length;
+                        continue;
+                    }
+                    if (status == 0xf0 || status == 0xf7) {
+                        uint32_t length = 0;
+                        if (!ReadVlq(data, eventPos, end, length) || eventPos + length > end) return changed;
+                        eventPos += length;
+                        continue;
+                    }
+                    if (status >= 0xf0) return changed;
+                    runningStatus = status;
+                } else if (runningStatus != 0) {
+                    status = runningStatus;
+                } else {
+                    return changed;
+                }
+
+                const int dataByteCount = (status >= 0xc0 && status <= 0xdf) ? 1 : 2;
+                for (int i = 0; i < dataByteCount; ++i) {
+                    if (eventPos >= end) return changed;
+                    if (data[eventPos] >= 0x80) {
+                        data[eventPos] = 0x7f;
+                        changed = true;
+                    }
+                    ++eventPos;
+                }
+            }
+
+            pos = end;
+        }
+
+        return changed;
+    }
+
+    bool LoadMidiFileTolerant(const std::string& filePath, MidiFile& midifile) {
+        std::ifstream input(std::filesystem::u8path(filePath), std::ios::binary);
+        if (input.is_open() && midifile.read(input)) {
+            return true;
+        }
+
+        std::ifstream rawInput(std::filesystem::u8path(filePath), std::ios::binary);
+        if (!rawInput.is_open()) return false;
+
+        std::vector<unsigned char> bytes((std::istreambuf_iterator<char>(rawInput)), std::istreambuf_iterator<char>());
+        if (!SanitizeMidiDataBytes(bytes)) return false;
+
+        std::string sanitized(reinterpret_cast<const char*>(bytes.data()), bytes.size());
+        std::istringstream sanitizedInput(sanitized, std::ios::binary);
+        return midifile.read(sanitizedInput);
+    }
+}
 
 const std::map<int, std::string> MidiPlayer::KEY_MAP = {
     {36, "1"}, {37, "shift+1"}, {38, "2"}, {39, "shift+2"}, {40, "3"}, {41, "4"},
@@ -32,14 +147,18 @@ bool MidiPlayer::LoadFile(const std::string& filePath) {
     Stop();
     
     MidiFile midifile;
-    if (!midifile.read(filePath)) {
+    if (!LoadMidiFileTolerant(filePath, midifile)) {
         return false;
     }
     
     midifile.doTimeAnalysis();
-    midifile.linkNotePairs();
     
     m_events.clear();
+    size_t eventCapacity = 0;
+    for (int track = 0; track < midifile.getTrackCount(); ++track) {
+        eventCapacity += static_cast<size_t>(midifile.getEventCount(track));
+    }
+    m_events.reserve(eventCapacity);
     
     for (int track = 0; track < midifile.getTrackCount(); track++) {
         for (int i = 0; i < midifile[track].size(); i++) {

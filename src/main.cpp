@@ -68,13 +68,8 @@ void EnableBlur(HWND hwnd) {
 }
 
 // Load texture function for DX11
-bool LoadTextureFromFile(const char* filename, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height)
+bool CreateTextureFromPixels(unsigned char* image_data, int image_width, int image_height, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height)
 {
-    int image_width = 0;
-    int image_height = 0;
-    unsigned char* image_data = stbi_load(filename, &image_width, &image_height, NULL, 4);
-    if (image_data == NULL) return false;
-
     D3D11_TEXTURE2D_DESC desc;
     ZeroMemory(&desc, sizeof(desc));
     desc.Width = image_width;
@@ -89,10 +84,11 @@ bool LoadTextureFromFile(const char* filename, ID3D11ShaderResourceView** out_sr
 
     ID3D11Texture2D* pTexture = NULL;
     D3D11_SUBRESOURCE_DATA subResource;
+    ZeroMemory(&subResource, sizeof(subResource));
     subResource.pSysMem = image_data;
     subResource.SysMemPitch = desc.Width * 4;
-    subResource.SysMemSlicePitch = 0;
-    g_pd3dDevice->CreateTexture2D(&desc, &subResource, &pTexture);
+    if (FAILED(g_pd3dDevice->CreateTexture2D(&desc, &subResource, &pTexture)))
+        return false;
 
     D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
     ZeroMemory(&srvDesc, sizeof(srvDesc));
@@ -100,14 +96,55 @@ bool LoadTextureFromFile(const char* filename, ID3D11ShaderResourceView** out_sr
     srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
     srvDesc.Texture2D.MipLevels = desc.MipLevels;
     srvDesc.Texture2D.MostDetailedMip = 0;
-    g_pd3dDevice->CreateShaderResourceView(pTexture, &srvDesc, out_srv);
+    HRESULT hr = g_pd3dDevice->CreateShaderResourceView(pTexture, &srvDesc, out_srv);
     pTexture->Release();
+    if (FAILED(hr))
+        return false;
 
     *out_width = image_width;
     *out_height = image_height;
-    stbi_image_free(image_data);
 
     return true;
+}
+
+bool LoadTextureFromFile(const char* filename, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height)
+{
+    int image_width = 0;
+    int image_height = 0;
+    unsigned char* image_data = stbi_load(filename, &image_width, &image_height, NULL, 4);
+    if (image_data == NULL) return false;
+
+    bool loaded = CreateTextureFromPixels(image_data, image_width, image_height, out_srv, out_width, out_height);
+    stbi_image_free(image_data);
+    return loaded;
+}
+
+bool LoadTextureFromResource(const char* resource_name, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height)
+{
+    HRSRC resource = FindResourceA(NULL, resource_name, RT_RCDATA);
+    if (!resource) return false;
+
+    HGLOBAL loaded_resource = LoadResource(NULL, resource);
+    if (!loaded_resource) return false;
+
+    void* resource_data = LockResource(loaded_resource);
+    DWORD resource_size = SizeofResource(NULL, resource);
+    if (!resource_data || resource_size == 0) return false;
+
+    int image_width = 0;
+    int image_height = 0;
+    unsigned char* image_data = stbi_load_from_memory(
+        static_cast<const stbi_uc*>(resource_data),
+        static_cast<int>(resource_size),
+        &image_width,
+        &image_height,
+        NULL,
+        4);
+    if (image_data == NULL) return false;
+
+    bool loaded = CreateTextureFromPixels(image_data, image_width, image_height, out_srv, out_width, out_height);
+    stbi_image_free(image_data);
+    return loaded;
 }
 
 void RegisterContextMenu() {
@@ -158,7 +195,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLine,
     if (argv) LocalFree(argv);
 
     // Create application window
-    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T("RobloxMidiClass"), NULL };
+    HICON appIcon = LoadIcon(hInstance, MAKEINTRESOURCE(1));
+    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), appIcon, NULL, NULL, NULL, _T("RobloxMidiClass"), appIcon };
     ::RegisterClassEx(&wc);
     
     // WS_POPUP for frameless window
@@ -195,27 +233,34 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLine,
     ImGui_ImplWin32_Init(hwnd);
     ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
 
-    // Load AI icons
+    // Load embedded icons
     int w, h;
     ID3D11ShaderResourceView* srv = nullptr;
-    if(LoadTextureFromFile("play.png", &srv, &w, &h)) UI::texPlay = (ImTextureID)srv;
-    if(LoadTextureFromFile("pause.png", &srv, &w, &h)) UI::texPause = (ImTextureID)srv;
-    if(LoadTextureFromFile("stop.png", &srv, &w, &h)) UI::texStop = (ImTextureID)srv;
-    if(LoadTextureFromFile("close.png", &srv, &w, &h)) UI::texClose = (ImTextureID)srv;
-    if(LoadTextureFromFile("minimize.png", &srv, &w, &h)) UI::texMinimize = (ImTextureID)srv;
-    if(LoadTextureFromFile("maximize.png", &srv, &w, &h)) UI::texMaximize = (ImTextureID)srv;
-    if(LoadTextureFromFile("logo.png", &srv, &w, &h)) UI::texLogo = (ImTextureID)srv;
-    if(LoadTextureFromFile("star_filled.png", &srv, &w, &h)) UI::texStarFilled = (ImTextureID)srv;
-    if(LoadTextureFromFile("star_empty.png", &srv, &w, &h)) UI::texStarEmpty = (ImTextureID)srv;
-    if(LoadTextureFromFile("prev.png", &srv, &w, &h)) UI::texPrev = (ImTextureID)srv;
-    if(LoadTextureFromFile("next.png", &srv, &w, &h)) UI::texNext = (ImTextureID)srv;
-    if(LoadTextureFromFile("tab_dash.png", &srv, &w, &h)) UI::texTabDash = (ImTextureID)srv;
-    if(LoadTextureFromFile("tab_midi.png", &srv, &w, &h)) UI::texTabMidi = (ImTextureID)srv;
-    if(LoadTextureFromFile("tab_settings.png", &srv, &w, &h)) UI::texTabSettings = (ImTextureID)srv;
-    if(LoadTextureFromFile("loop.png", &srv, &w, &h)) UI::texLoop = (ImTextureID)srv;
-    if(LoadTextureFromFile("discord.png", &srv, &w, &h)) UI::texDiscord = (ImTextureID)srv;
-    if(LoadTextureFromFile("github.png", &srv, &w, &h)) UI::texGithub = (ImTextureID)srv;
-    if(LoadTextureFromFile("instagram.png", &srv, &w, &h)) UI::texInstagram = (ImTextureID)srv;
+    if(LoadTextureFromResource("PLAY_PNG", &srv, &w, &h)) UI::texPlay = (ImTextureID)srv;
+    if(LoadTextureFromResource("PAUSE_PNG", &srv, &w, &h)) UI::texPause = (ImTextureID)srv;
+    if(LoadTextureFromResource("STOP_PNG", &srv, &w, &h)) UI::texStop = (ImTextureID)srv;
+    if(LoadTextureFromResource("CLOSE_PNG", &srv, &w, &h)) UI::texClose = (ImTextureID)srv;
+    if(LoadTextureFromResource("MINIMIZE_PNG", &srv, &w, &h)) UI::texMinimize = (ImTextureID)srv;
+    if(LoadTextureFromResource("MAXIMIZE_PNG", &srv, &w, &h)) UI::texMaximize = (ImTextureID)srv;
+    if(LoadTextureFromResource("LOGO_PNG", &srv, &w, &h)) UI::texLogo = (ImTextureID)srv;
+    if(LoadTextureFromResource("STAR_FILLED_PNG", &srv, &w, &h)) UI::texStarFilled = (ImTextureID)srv;
+    if(LoadTextureFromResource("STAR_EMPTY_PNG", &srv, &w, &h)) UI::texStarEmpty = (ImTextureID)srv;
+    if(LoadTextureFromResource("PREV_PNG", &srv, &w, &h)) UI::texPrev = (ImTextureID)srv;
+    if(LoadTextureFromResource("NEXT_PNG", &srv, &w, &h)) UI::texNext = (ImTextureID)srv;
+    if(LoadTextureFromResource("TAB_DASH_PNG", &srv, &w, &h)) UI::texTabDash = (ImTextureID)srv;
+    if(LoadTextureFromResource("TAB_MIDI_PNG", &srv, &w, &h)) UI::texTabMidi = (ImTextureID)srv;
+    if(LoadTextureFromResource("TAB_SETTINGS_PNG", &srv, &w, &h)) UI::texTabSettings = (ImTextureID)srv;
+    if(LoadTextureFromResource("LOOP_PNG", &srv, &w, &h)) UI::texLoop = (ImTextureID)srv;
+    if(LoadTextureFromResource("LOAD_PNG", &srv, &w, &h)) UI::texLoad = (ImTextureID)srv;
+    if(LoadTextureFromResource("QUEUE_PNG", &srv, &w, &h)) UI::texQueue = (ImTextureID)srv;
+    if(LoadTextureFromResource("UPLOAD_MIDI_PNG", &srv, &w, &h)) UI::texUploadMidi = (ImTextureID)srv;
+    if(LoadTextureFromResource("CLEAR_QUEUE_PNG", &srv, &w, &h)) UI::texClearQueue = (ImTextureID)srv;
+    if(LoadTextureFromResource("SHUFFLE_BTN_PNG", &srv, &w, &h)) UI::texShuffleButton = (ImTextureID)srv;
+    if(LoadTextureFromResource("RESET_HOTKEYS_PNG", &srv, &w, &h)) UI::texResetHotkeys = (ImTextureID)srv;
+    if(LoadTextureFromResource("ROBLOX_LAUNCH_PNG", &srv, &w, &h)) UI::texRobloxLaunch = (ImTextureID)srv;
+    if(LoadTextureFromResource("DISCORD_PNG", &srv, &w, &h)) UI::texDiscord = (ImTextureID)srv;
+    if(LoadTextureFromResource("GITHUB_PNG", &srv, &w, &h)) UI::texGithub = (ImTextureID)srv;
+    if(LoadTextureFromResource("INSTAGRAM_PNG", &srv, &w, &h)) UI::texInstagram = (ImTextureID)srv;
 
     // Scale UI fonts and elements slightly to make them easier to read
     io.FontGlobalScale = 1.15f;

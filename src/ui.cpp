@@ -6,6 +6,7 @@
 #include <vector>
 #include <algorithm>
 #include <random>
+#include <cwchar>
 
 namespace UI {
 
@@ -23,6 +24,9 @@ namespace UI {
     static bool capturingShuffleKey = false;
 
     std::string GetKeyName(int vk);
+    std::string FitTextWithEllipsis(const std::string& text, float maxWidth);
+    bool IconTextButton(const char* id, const char* label, ImTextureID texture, const ImVec2& size);
+    bool SmallIconButton(const char* id, ImTextureID texture, const char* fallback, const char* tooltip, const ImVec2& size);
 
     ImTextureID texPlay = (ImTextureID)0;
     ImTextureID texPause = (ImTextureID)0;
@@ -39,6 +43,13 @@ namespace UI {
     ImTextureID texTabMidi = (ImTextureID)0;
     ImTextureID texTabSettings = (ImTextureID)0;
     ImTextureID texLoop = (ImTextureID)0;
+    ImTextureID texLoad = (ImTextureID)0;
+    ImTextureID texQueue = (ImTextureID)0;
+    ImTextureID texUploadMidi = (ImTextureID)0;
+    ImTextureID texClearQueue = (ImTextureID)0;
+    ImTextureID texShuffleButton = (ImTextureID)0;
+    ImTextureID texResetHotkeys = (ImTextureID)0;
+    ImTextureID texRobloxLaunch = (ImTextureID)0;
     ImTextureID texDiscord = (ImTextureID)0;
     ImTextureID texGithub = (ImTextureID)0;
     ImTextureID texInstagram = (ImTextureID)0;
@@ -96,30 +107,41 @@ namespace UI {
         ApplyPremiumStyle();
     }
 
+    std::string WideToUtf8(const wchar_t* text) {
+        if (!text || !*text) return {};
+
+        int size = WideCharToMultiByte(CP_UTF8, 0, text, -1, nullptr, 0, nullptr, nullptr);
+        if (size <= 0) return {};
+
+        std::string result(size - 1, '\0');
+        WideCharToMultiByte(CP_UTF8, 0, text, -1, result.data(), size, nullptr, nullptr);
+        return result;
+    }
+
     std::vector<std::string> OpenMidiDialogMulti() {
         std::vector<std::string> results;
-        char filename[8192]; // Large buffer for multiple files
-        ZeroMemory(filename, sizeof(filename));
+        std::vector<wchar_t> filename(256 * 1024);
         
-        OPENFILENAMEA ofn;
+        OPENFILENAMEW ofn;
         ZeroMemory(&ofn, sizeof(ofn));
         ofn.lStructSize = sizeof(ofn);
         ofn.hwndOwner = NULL;
-        ofn.lpstrFilter = "MIDI Files\0*.mid;*.midi\0All Files\0*.*\0";
-        ofn.lpstrFile = filename;
-        ofn.nMaxFile = sizeof(filename);
-        ofn.lpstrTitle = "Select MIDI Files";
+        ofn.lpstrFilter = L"MIDI Files\0*.mid;*.midi\0All Files\0*.*\0";
+        ofn.lpstrFile = filename.data();
+        ofn.nMaxFile = static_cast<DWORD>(filename.size());
+        ofn.lpstrTitle = L"Select MIDI Files";
         ofn.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST | OFN_ALLOWMULTISELECT | OFN_EXPLORER;
         
-        if (GetOpenFileNameA(&ofn)) {
-            std::string dirOrFile = filename;
-            if (filename[dirOrFile.length() + 1] == '\0') {
-                results.push_back(dirOrFile);
+        if (GetOpenFileNameW(&ofn)) {
+            const wchar_t* first = filename.data();
+            std::wstring dirOrFile = first;
+            if (first[dirOrFile.length() + 1] == L'\0') {
+                results.push_back(WideToUtf8(dirOrFile.c_str()));
             } else {
-                char* p = filename + dirOrFile.length() + 1;
+                wchar_t* p = filename.data() + dirOrFile.length() + 1;
                 while (*p) {
-                    results.push_back(dirOrFile + "\\" + p);
-                    p += strlen(p) + 1;
+                    results.push_back(WideToUtf8((dirOrFile + L"\\" + p).c_str()));
+                    p += std::wcslen(p) + 1;
                 }
             }
         }
@@ -138,7 +160,7 @@ namespace UI {
         ImGui::Text("Dashboard");
         ImGui::Spacing();
         
-        if (ImGui::Button("Upload MIDI File", ImVec2(0, 35))) {
+        if (IconTextButton("upload_midi_btn", "Upload MIDI File", texUploadMidi, ImVec2(150, 35))) {
             auto files = OpenMidiDialogMulti();
             for (const auto& f : files) {
                 player.AddToQueue(f);
@@ -148,12 +170,12 @@ namespace UI {
             }
         }
         ImGui::SameLine();
-        if (ImGui::Button("Clear Queue", ImVec2(0, 35))) {
+        if (IconTextButton("clear_queue_btn", "Clear Queue", texClearQueue, ImVec2(128, 35))) {
             player.GetQueue().clear();
             player.Stop();
         }
         ImGui::SameLine();
-        if (ImGui::Button("Shuffle", ImVec2(0, 35))) {
+        if (IconTextButton("shuffle_btn", "Shuffle", texShuffleButton, ImVec2(96, 35))) {
             auto& q = player.GetQueue();
             if (q.size() > 1) {
                 std::random_device rd;
@@ -302,10 +324,22 @@ namespace UI {
         ImGui::BeginChild("LibraryList", ImVec2(0, 0), true);
         for (size_t i = 0; i < library.size(); i++) {
             ImGui::PushID((int)i);
-            ImGui::Text("%s", GetFileNameFromPath(library[i]).c_str());
-            
-            // Push elements to the right
-            ImGui::SameLine(ImGui::GetWindowWidth() - 160);
+
+            const float rowX = ImGui::GetCursorPosX();
+            const float rowY = ImGui::GetCursorPosY();
+            const float rowWidth = ImGui::GetContentRegionAvail().x;
+            const float rightGutter = ImGui::GetStyle().ScrollbarSize + 10.0f;
+            const float actionWidth = 132.0f;
+            const float textWidth = rowWidth > actionWidth + rightGutter + 24.0f ? rowWidth - actionWidth - rightGutter - 12.0f : rowWidth;
+            std::string fileName = GetFileNameFromPath(library[i]);
+            std::string visibleName = FitTextWithEllipsis(fileName, textWidth);
+
+            ImGui::Text("%s", visibleName.c_str());
+            if (ImGui::IsItemHovered() && visibleName != fileName) {
+                ImGui::SetTooltip("%s", fileName.c_str());
+            }
+
+            ImGui::SetCursorPos(ImVec2(rowX + rowWidth - actionWidth - rightGutter, rowY));
             
             if (texStarFilled && texStarEmpty) {
                 if (ImGui::ImageButton("fav_lib", player.IsFavorite(library[i]) ? texStarFilled : texStarEmpty, ImVec2(20, 20))) {
@@ -318,16 +352,16 @@ namespace UI {
             }
             ImGui::SameLine();
             
-            if (ImGui::Button("Load", ImVec2(40, 20))) {
+            if (SmallIconButton("load_lib", texLoad, "Load", "Load", ImVec2(20, 20))) {
                 player.AddToQueue(library[i]);
                 player.LoadFromQueue(player.GetQueue().size() - 1);
             }
             ImGui::SameLine();
-            if (ImGui::Button("+ Queue", ImVec2(60, 20))) {
+            if (SmallIconButton("queue_lib", texQueue, "+ Queue", "Add to queue", ImVec2(20, 20))) {
                 player.AddToQueue(library[i]);
             }
             ImGui::SameLine();
-            if (ImGui::Button("Remove", ImVec2(60, 20))) {
+            if (SmallIconButton("remove_lib", texClose, "X", "Remove", ImVec2(20, 20))) {
                 library.erase(library.begin() + i);
                 i--;
             }
@@ -350,8 +384,22 @@ namespace UI {
         ImGui::BeginChild("FavoritesList", ImVec2(0, 0), true);
         for (size_t i = 0; i < favorites.size(); i++) {
             ImGui::PushID((int)i);
-            ImGui::Text("%s", GetFileNameFromPath(favorites[i]).c_str());
-            ImGui::SameLine(ImGui::GetWindowWidth() - 160);
+
+            const float rowX = ImGui::GetCursorPosX();
+            const float rowY = ImGui::GetCursorPosY();
+            const float rowWidth = ImGui::GetContentRegionAvail().x;
+            const float rightGutter = ImGui::GetStyle().ScrollbarSize + 10.0f;
+            const float actionWidth = 100.0f;
+            const float textWidth = rowWidth > actionWidth + rightGutter + 24.0f ? rowWidth - actionWidth - rightGutter - 12.0f : rowWidth;
+            std::string fileName = GetFileNameFromPath(favorites[i]);
+            std::string visibleName = FitTextWithEllipsis(fileName, textWidth);
+
+            ImGui::Text("%s", visibleName.c_str());
+            if (ImGui::IsItemHovered() && visibleName != fileName) {
+                ImGui::SetTooltip("%s", fileName.c_str());
+            }
+
+            ImGui::SetCursorPos(ImVec2(rowX + rowWidth - actionWidth - rightGutter, rowY));
             
             if (texStarFilled) {
                 if (ImGui::ImageButton("fav_list", texStarFilled, ImVec2(20, 20))) {
@@ -369,12 +417,12 @@ namespace UI {
                 }
             }
             ImGui::SameLine();
-            if (ImGui::Button("Load", ImVec2(40, 20))) {
+            if (SmallIconButton("load_fav", texLoad, "Load", "Load", ImVec2(20, 20))) {
                 player.AddToQueue(favorites[i]);
                 player.LoadFromQueue(player.GetQueue().size() - 1);
             }
             ImGui::SameLine();
-            if (ImGui::Button("+ Queue", ImVec2(60, 20))) {
+            if (SmallIconButton("queue_fav", texQueue, "+ Queue", "Add to queue", ImVec2(20, 20))) {
                 player.AddToQueue(favorites[i]);
             }
             ImGui::PopID();
@@ -582,14 +630,14 @@ namespace UI {
         }
 
         ImGui::Spacing();
-        if (ImGui::Button("Reset Hotkeys", ImVec2(150, 30))) {
+        if (IconTextButton("reset_hotkeys_btn", "Reset Hotkeys", texResetHotkeys, ImVec2(160, 35))) {
             player.ResetHotkeys();
         }
 
         ImGui::Spacing(); ImGui::Spacing(); ImGui::Separator(); ImGui::Spacing();
 
         ImGui::Text("External");
-        if (ImGui::Button("Launch Roblox", ImVec2(200, 40))) {
+        if (IconTextButton("launch_roblox_btn", "Launch Roblox", texRobloxLaunch, ImVec2(160, 35))) {
             ShellExecuteA(NULL, "open", "roblox-player:", NULL, NULL, SW_SHOWNORMAL);
         }
 
@@ -636,6 +684,56 @@ namespace UI {
         ImGui::PopStyleColor(2);
     }
 
+    std::string FitTextWithEllipsis(const std::string& text, float maxWidth) {
+        if (maxWidth <= 0.0f || ImGui::CalcTextSize(text.c_str()).x <= maxWidth) {
+            return text;
+        }
+
+        const char* ellipsis = "...";
+        float ellipsisWidth = ImGui::CalcTextSize(ellipsis).x;
+        if (ellipsisWidth >= maxWidth) {
+            return ellipsis;
+        }
+
+        std::string result = text;
+        while (!result.empty() && ImGui::CalcTextSize(result.c_str()).x + ellipsisWidth > maxWidth) {
+            result.pop_back();
+        }
+        return result + ellipsis;
+    }
+
+    bool IconTextButton(const char* id, const char* label, ImTextureID texture, const ImVec2& size) {
+        ImGui::PushID(id);
+        if (texture) {
+            ImVec2 pos = ImGui::GetCursorScreenPos();
+            bool clicked = ImGui::InvisibleButton("##full_image_button", size);
+            ImDrawList* drawList = ImGui::GetWindowDrawList();
+            drawList->AddImage(texture, pos, ImVec2(pos.x + size.x, pos.y + size.y));
+            if (ImGui::IsItemHovered()) {
+                drawList->AddRectFilled(pos, ImVec2(pos.x + size.x, pos.y + size.y), IM_COL32(255, 255, 255, 18), ImGui::GetStyle().FrameRounding);
+            }
+            ImGui::PopID();
+            return clicked;
+        }
+
+        bool clicked = ImGui::Button(label, size);
+        ImGui::PopID();
+        return clicked;
+    }
+
+    bool SmallIconButton(const char* id, ImTextureID texture, const char* fallback, const char* tooltip, const ImVec2& size) {
+        bool clicked = false;
+        if (texture) {
+            clicked = ImGui::ImageButton(id, texture, size);
+        } else {
+            clicked = ImGui::Button(fallback, ImVec2(size.x + 18.0f, size.y));
+        }
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("%s", tooltip);
+        }
+        return clicked;
+    }
+
     void RenderPlayerControls(MidiPlayer& player) {
         ImGui::BeginChild("PlayerControls", ImVec2(0, 80), true);
 
@@ -648,17 +746,32 @@ namespace UI {
 
         ImGui::Spacing();
 
-        // Now file info and buttons
+        const float windowWidth = ImGui::GetWindowWidth();
+        const float controlsWidth = 230.0f;
+        const float controlsX = (windowWidth - controlsWidth) * 0.5f;
+        const float rowY = ImGui::GetCursorPosY();
+        const float infoX = 12.0f;
+        const float availableInfoWidth = controlsX - infoX - 18.0f;
+        const float infoWidth = availableInfoWidth > 90.0f ? availableInfoWidth : 90.0f;
+
+        // Track info stays in its own lane so long song names cannot overlap controls.
+        ImGui::SetCursorPos(ImVec2(infoX, rowY));
         ImGui::BeginGroup();
         if (player.IsLoaded()) {
-            ImGui::TextColored(ImVec4(0.8f, 0.8f, 0.9f, 1.0f), "%s", player.GetCurrentFileName().c_str());
+            std::string title = player.GetCurrentFileName();
+            std::string visibleTitle = FitTextWithEllipsis(title, infoWidth);
+            ImGui::TextColored(ImVec4(0.8f, 0.8f, 0.9f, 1.0f), "%s", visibleTitle.c_str());
+            if (ImGui::IsItemHovered() && visibleTitle != title) {
+                ImGui::SetTooltip("%s", title.c_str());
+            }
             ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.6f, 1.0f), player.IsPlaying() ? "Playing" : (player.IsPaused() ? "Paused" : "Stopped"));
         } else {
             ImGui::TextDisabled("No Track Playing");
         }
         ImGui::EndGroup();
 
-        ImGui::SameLine(ImGui::GetWindowWidth() / 2 - 120);
+        const float minControlsX = infoX + infoWidth + 18.0f;
+        ImGui::SetCursorPos(ImVec2(controlsX > minControlsX ? controlsX : minControlsX, rowY));
 
         // Buttons
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0,0,0,0)); // Transparent buttons
